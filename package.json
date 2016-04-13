@@ -1,0 +1,20 @@
+{
+  "name": "vue-semantic-ui",
+  "homepage": "http://www.lc4e.com",
+  "version": "0.0.1",
+  "description": "it&#x27;s a vuejs version of waves",
+  "author": "teddyzhu",
+  "scripts": {
+
+  },
+  "dependencies": {
+    "vue": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Teddy-Zhu/vue-waves.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+  }
+}
