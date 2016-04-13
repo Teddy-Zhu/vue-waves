@@ -9,7 +9,8 @@
  * Released under the MIT license
  * https://github.com/fians/Waves/blob/master/LICENSE
  */
-module.exports = function () {
+require('./waves.css');
+module.exports = function (Vue) {
     var toString = Object.prototype.toString;
     var isTouchAvailable = 'ontouchstart' in window;
 
@@ -321,7 +322,7 @@ module.exports = function () {
     /**
      * Bubble the click and show effect if .waves-effect elem was found
      */
-    function showEffect(e,element) {
+    function showEffect(e, element) {
 
         // Disable effect if element has "disabled" property on it
         // In some cases, the event is not triggered by the current element
@@ -388,7 +389,7 @@ module.exports = function () {
         }
     }
 
-    return {
+    Vue.directive("waves", {
         name: 'waves',
         version: '0.7.5',
 
@@ -439,5 +440,5 @@ module.exports = function () {
         }
 
 
-    }
+    })
 }

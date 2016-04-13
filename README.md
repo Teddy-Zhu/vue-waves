@@ -8,10 +8,20 @@
 # install dependencies
 npm install vue-waves
 ```
+then in the js file
 ``` javascript
 var Vue = require('vue')
 var vueWaves = require('vue-waves');
 
-Vue.directive('waves', vueWaves);
+Vue.use(vueWaves);
 ```
+
+then in vue file
+
+``` html
+<teamplate>
+   <div v-waves>
+</teamlate>
+```
+
 
