@@ -416,9 +416,9 @@ module.exports = function (Vue) {
                 element.className += ' waves-effect' + classes;
             }
 
-            this.show = (e) => {
-                showEffect(e, element);
-            };
+            this.show = function (e) {
+                return showEffect(e, element);
+            }
 
             if (isTouchAvailable) {
                 element.addEventListener('touchstart', this.show, false);

@@ -1,14 +1,14 @@
 {
   "name": "vue-waves",
   "homepage": "http://www.eicoding.com",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "it&#x27;s a vuejs version of waves",
   "author": "teddyzhu",
   "scripts": {
 
   },
   "dependencies": {
-    "vue": ">1.0.0",
+    "vue": "^1.0.21",
     "css-loader": "^0.23.1",
     "cssnext-loader": "^1.0.1"
   },
