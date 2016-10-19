@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>vue-waves</title>
+    <script src="http://cdn.bootcss.com/vue/2.0.3/vue.js" charset="utf-8"></script>
+    <script src="../dist/vue-waves.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1 class="message" v-waves.block>
+            {{ message }}
+        </h1>
+        <section>
+            <a v-for="color in colors" :style="{background:color}" v-waves.button>Vue Waves</a>
+        </section>
+        <section>
+            <button type="button" v-for="color in colors" :style="{background:color}" v-waves.button.float>Vue Waves</button>
+        </section>
+        <section>
+            <input type="button" v-for="color in colors" :style="{background:color}" v-waves.button.light value="Vue Waves">
+        </section>
+        <section>
+            <i v-for="color in colors" :style="{background:color}" v-waves.circle>V</i>
+        </section>
+        <section>
+            <i v-for="color in colors" :style="{background:color}" v-waves.circle.float>V</i>
+        </section>
+        <section>
+            <img v-waves.block src="https://farm2.staticflickr.com/1297/1091511802_2fb2451ecc_n.jpg">
+        </section>
+    </div>
+    <style media="screen">
+        #app {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .message {
+            padding: 16px;
+        }
+        
+        section {
+            margin-top: 16px;
+        }
+        
+        a,
+        button,
+        input,
+        i {
+            margin-left: 8px;
+            margin-right: 8px;
+            color: #fff!important;
+        }
+    </style>
+    <script type="text/javascript">
+        Vue.use(VueWaves)
+        new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue Waves!',
+                colors: [
+                    'rgb(3, 169, 244)',
+                    'rgb(76, 175, 80)',
+                    'rgb(255, 235, 59)',
+                    'rgb(255, 152, 0)',
+                    'rgb(255, 87, 34)',
+                    'rgb(233, 30, 99)',
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>

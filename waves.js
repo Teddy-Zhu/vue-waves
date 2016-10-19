@@ -1,6 +1,3 @@
-/**
- * Created by teddyzhu on 16/4/12.
- */
 /*!
  * Waves v0.7.5
  * http://fian.my.id/Waves
@@ -9,9 +6,34 @@
  * Released under the MIT license
  * https://github.com/fians/Waves/blob/master/LICENSE
  */
-require('./waves.css');
-module.exports = function (Vue) {
-    var toString = Object.prototype.toString;
+
+;(function(window, factory) {
+    'use strict';
+
+    // AMD. Register as an anonymous module.  Wrap in function so we have access
+    // to root via `this`.
+    if (typeof define === 'function' && define.amd) {
+        define([], function() {
+            return factory.apply(window);
+        });
+    }
+
+    // Node. Does not work with strict CommonJS, but only CommonJS-like
+    // environments that support module.exports, like Node.
+    else if (typeof exports === 'object') {
+        module.exports = factory.call(window);
+    }
+
+    // Browser globals.
+    else {
+        window.Waves = factory.call(window);
+    }
+})(typeof global === 'object' ? global : this, function() {
+    'use strict';
+
+    var Waves            = Waves || {};
+    var $$               = document.querySelectorAll.bind(document);
+    var toString         = Object.prototype.toString;
     var isTouchAvailable = 'ontouchstart' in window;
 
 
@@ -24,10 +46,32 @@ module.exports = function (Vue) {
         return isWindow(elem) ? elem : elem.nodeType === 9 && elem.defaultView;
     }
 
+    function isObject(value) {
+        var type = typeof value;
+        return type === 'function' || type === 'object' && !!value;
+    }
+
+    function isDOMNode(obj) {
+        return isObject(obj) && obj.nodeType > 0;
+    }
+
+    function getWavesElements(nodes) {
+        var stringRepr = toString.call(nodes);
+
+        if (stringRepr === '[object String]') {
+            return $$(nodes);
+        } else if (isObject(nodes) && /^\[object (Array|HTMLCollection|NodeList|Object)\]$/.test(stringRepr) && nodes.hasOwnProperty('length')) {
+            return nodes;
+        } else if (isDOMNode(nodes)) {
+            return [nodes];
+        }
+
+        return [];
+    }
 
     function offset(elem) {
         var docElem, win,
-            box = {top: 0, left: 0},
+            box = { top: 0, left: 0 },
             doc = elem && elem.ownerDocument;
 
         docElem = doc.documentElement;
@@ -62,7 +106,7 @@ module.exports = function (Vue) {
         // Effect delay (check for scroll before showing effect)
         delay: 200,
 
-        show: function (e, element, velocity) {
+        show: function(e, element, velocity) {
 
             // Disable right click
             if (e.button === 2) {
@@ -77,24 +121,24 @@ module.exports = function (Vue) {
             element.appendChild(ripple);
 
             // Get click coordinate and element width
-            var pos = offset(element);
+            var pos       = offset(element);
             var relativeY = 0;
             var relativeX = 0;
             // Support for touch devices
-            if ('touches' in e && e.touches.length) {
-                relativeY = (e.touches[0].pageY - pos.top);
-                relativeX = (e.touches[0].pageX - pos.left);
+            if('touches' in e && e.touches.length) {
+                relativeY   = (e.touches[0].pageY - pos.top);
+                relativeX   = (e.touches[0].pageX - pos.left);
             }
             //Normal case
             else {
-                relativeY = (e.pageY - pos.top);
-                relativeX = (e.pageX - pos.left);
+                relativeY   = (e.pageY - pos.top);
+                relativeX   = (e.pageX - pos.left);
             }
             // Support for synthetic events
             relativeX = relativeX >= 0 ? relativeX : 0;
             relativeY = relativeY >= 0 ? relativeY : 0;
 
-            var scale = 'scale(' + ((element.clientWidth / 100) * 3) + ')';
+            var scale     = 'scale(' + ((element.clientWidth / 100) * 3) + ')';
             var translate = 'translate(0,0)';
 
             if (velocity) {
@@ -128,14 +172,14 @@ module.exports = function (Vue) {
 
             var duration = e.type === 'mousemove' ? 2500 : Effect.duration;
             rippleStyle['-webkit-transition-duration'] = duration + 'ms';
-            rippleStyle['-moz-transition-duration'] = duration + 'ms';
-            rippleStyle['-o-transition-duration'] = duration + 'ms';
-            rippleStyle['transition-duration'] = duration + 'ms';
+            rippleStyle['-moz-transition-duration']    = duration + 'ms';
+            rippleStyle['-o-transition-duration']      = duration + 'ms';
+            rippleStyle['transition-duration']         = duration + 'ms';
 
             ripple.setAttribute('style', convertStyle(rippleStyle));
         },
 
-        hide: function (e, element) {
+        hide: function(e, element) {
             element = element || this;
 
             var ripples = element.getElementsByClassName('waves-rippling');
@@ -143,6 +187,14 @@ module.exports = function (Vue) {
             for (var i = 0, len = ripples.length; i < len; i++) {
                 removeRipple(e, element, ripples[i]);
             }
+
+            if (isTouchAvailable) {
+                element.removeEventListener('touchend', Effect.hide);
+                element.removeEventListener('touchcancel', Effect.hide);
+            }
+
+            element.removeEventListener('mouseup', Effect.hide);
+            element.removeEventListener('mouseleave', Effect.hide);
         }
     };
 
@@ -153,7 +205,7 @@ module.exports = function (Vue) {
     var TagWrapper = {
 
         // Wrap <input> tag so it can perform the effect
-        input: function (element) {
+        input: function(element) {
 
             var parent = element.parentNode;
 
@@ -163,7 +215,7 @@ module.exports = function (Vue) {
             }
 
             // Put element class and style to the specified parent
-            var wrapper = document.createElement('i');
+            var wrapper       = document.createElement('i');
             wrapper.className = element.className + ' waves-input-wrapper';
             element.className = 'waves-button-input';
 
@@ -172,8 +224,8 @@ module.exports = function (Vue) {
             wrapper.appendChild(element);
 
             // Apply element color and background color to wrapper
-            var elementStyle = window.getComputedStyle(element, null);
-            var color = elementStyle.color;
+            var elementStyle    = window.getComputedStyle(element, null);
+            var color           = elementStyle.color;
             var backgroundColor = elementStyle.backgroundColor;
 
             wrapper.setAttribute('style', 'color:' + color + ';background:' + backgroundColor);
@@ -182,7 +234,7 @@ module.exports = function (Vue) {
         },
 
         // Wrap <img> tag so it can perform the effect
-        img: function (element) {
+        img: function(element) {
 
             var parent = element.parentNode;
 
@@ -192,7 +244,7 @@ module.exports = function (Vue) {
             }
 
             // Put element as child
-            var wrapper = document.createElement('i');
+            var wrapper  = document.createElement('i');
             parent.replaceChild(wrapper, element);
             wrapper.appendChild(element);
 
@@ -214,7 +266,7 @@ module.exports = function (Vue) {
 
         var relativeX = ripple.getAttribute('data-x');
         var relativeY = ripple.getAttribute('data-y');
-        var scale = ripple.getAttribute('data-scale');
+        var scale     = ripple.getAttribute('data-scale');
         var translate = ripple.getAttribute('data-translate');
 
         // Get delay beetween mousedown and mouse leave
@@ -232,7 +284,7 @@ module.exports = function (Vue) {
         // Fade out ripple after delay
         var duration = e.type === 'mousemove' ? 2500 : Effect.duration;
 
-        setTimeout(function () {
+        setTimeout(function() {
 
             var style = {
                 top: relativeY + 'px',
@@ -253,7 +305,7 @@ module.exports = function (Vue) {
 
             ripple.setAttribute('style', convertStyle(style));
 
-            setTimeout(function () {
+            setTimeout(function() {
                 try {
                     el.removeChild(ripple);
                 } catch (e) {
@@ -276,7 +328,7 @@ module.exports = function (Vue) {
          * touchend, nor in the 500ms after touchend. */
         touches: 0,
 
-        allowEvent: function (e) {
+        allowEvent: function(e) {
 
             var allow = true;
 
@@ -286,7 +338,7 @@ module.exports = function (Vue) {
 
             return allow;
         },
-        registerEvent: function (e) {
+        registerEvent: function(e) {
             var eType = e.type;
 
             if (eType === 'touchstart') {
@@ -295,7 +347,7 @@ module.exports = function (Vue) {
 
             } else if (/^(touchend|touchcancel)$/.test(eType)) {
 
-                setTimeout(function () {
+                setTimeout(function() {
                     if (TouchHandler.touches) {
                         TouchHandler.touches -= 1; // pop after 500ms
                     }
@@ -316,19 +368,32 @@ module.exports = function (Vue) {
             return null;
         }
 
-        return e;
+        var element = null;
+        var target = e.target || e.srcElement;
+
+        while (target.parentElement) {
+            if ( (!(target instanceof SVGElement)) && target.classList.contains('waves-effect')) {
+                element = target;
+                break;
+            }
+            target = target.parentElement;
+        }
+
+        return element;
     }
 
     /**
      * Bubble the click and show effect if .waves-effect elem was found
      */
-    function showEffect(e, element) {
+    function showEffect(e) {
 
         // Disable effect if element has "disabled" property on it
         // In some cases, the event is not triggered by the current element
         // if (e.target.getAttribute('disabled') !== null) {
         //     return;
         // }
+
+        var element = getWavesEffectElement(e);
 
         if (element !== null) {
 
@@ -348,7 +413,7 @@ module.exports = function (Vue) {
                     Effect.show(e, element);
                 }, Effect.delay);
 
-                var hideEffect = function (hideEvent) {
+                var hideEffect = function(hideEvent) {
 
                     // if touch hasn't moved, and effect not yet started: start effect now
                     if (timer) {
@@ -360,20 +425,29 @@ module.exports = function (Vue) {
                         hidden = true;
                         Effect.hide(hideEvent, element);
                     }
+
+                    removeListeners();
                 };
 
-                var touchMove = function (moveEvent) {
+                var touchMove = function(moveEvent) {
                     if (timer) {
                         clearTimeout(timer);
                         timer = null;
                     }
                     hideEffect(moveEvent);
+
+                    removeListeners();
                 };
 
                 element.addEventListener('touchmove', touchMove, false);
                 element.addEventListener('touchend', hideEffect, false);
                 element.addEventListener('touchcancel', hideEffect, false);
 
+                var removeListeners = function() {
+                    element.removeEventListener('touchmove', touchMove);
+                    element.removeEventListener('touchend', hideEffect);
+                    element.removeEventListener('touchcancel', hideEffect);
+                };
             } else {
 
                 Effect.show(e, element);
@@ -389,22 +463,49 @@ module.exports = function (Vue) {
         }
     }
 
-    Vue.directive("waves", {
-        name: 'waves',
-        version: '0.7.5',
+    Waves.init = function(options) {
+        var body = document.body;
 
-        bind: function () {
+        options = options || {};
 
-            var classes = this.expression;
+        if ('duration' in options) {
+            Effect.duration = options.duration;
+        }
 
-            if (toString.call(classes) === '[object Array]') {
-                classes = classes.join(' ');
-            }
+        if ('delay' in options) {
+            Effect.delay = options.delay;
+        }
 
-            classes = classes ? ' ' + classes : '';
+        if (isTouchAvailable) {
+            body.addEventListener('touchstart', showEffect, false);
+            body.addEventListener('touchcancel', TouchHandler.registerEvent, false);
+            body.addEventListener('touchend', TouchHandler.registerEvent, false);
+        }
 
-            var element = this.el, tagName;
+        body.addEventListener('mousedown', showEffect, false);
+    };
 
+
+    /**
+     * Attach Waves to dynamically loaded inputs, or add .waves-effect and other
+     * waves classes to a set of elements. Set drag to true if the ripple mouseover
+     * or skimming effect should be applied to the elements.
+     */
+    Waves.attach = function(elements, classes) {
+
+        elements = getWavesElements(elements);
+
+        if (toString.call(classes) === '[object Array]') {
+            classes = classes.join(' ');
+        }
+
+        classes = classes ? ' ' + classes : '';
+
+        var element, tagName;
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+
+            element = elements[i];
             tagName = element.tagName.toLowerCase();
 
             if (['input', 'img'].indexOf(tagName) !== -1) {
@@ -415,30 +516,84 @@ module.exports = function (Vue) {
             if (element.className.indexOf('waves-effect') === -1) {
                 element.className += ' waves-effect' + classes;
             }
+        }
+    };
 
-            this.show = function (e) {
-                return showEffect(e, element);
-            }
 
-            if (isTouchAvailable) {
-                element.addEventListener('touchstart', this.show, false);
-                element.addEventListener('touchcancel', TouchHandler.registerEvent, false);
-                element.addEventListener('touchend', TouchHandler.registerEvent, false);
-            }
+    /**
+     * Cause a ripple to appear in an element via code.
+     */
+    Waves.ripple = function(elements, options) {
+        elements = getWavesElements(elements);
+        var elementsLen = elements.length;
 
-            element.addEventListener("mousedown", this.show, false);
-        },
+        options          = options || {};
+        options.wait     = options.wait || 0;
+        options.position = options.position || null; // default = centre of element
 
-        unbind: function () {
 
-            var mouseup = {
-                type: 'mouseup',
+        if (elementsLen) {
+            var element, pos, off, centre = {}, i = 0;
+            var mousedown = {
+                type: 'mousedown',
                 button: 1
             };
-            Effect.hide(mouseup, this.el);
+            var hideRipple = function(mouseup, element) {
+                return function() {
+                    Effect.hide(mouseup, element);
+                };
+            };
 
+            for (; i < elementsLen; i++) {
+                element = elements[i];
+                pos = options.position || {
+                    x: element.clientWidth / 2,
+                    y: element.clientHeight / 2
+                };
+
+                off      = offset(element);
+                centre.x = off.left + pos.x;
+                centre.y = off.top + pos.y;
+
+                mousedown.pageX = centre.x;
+                mousedown.pageY = centre.y;
+
+                Effect.show(mousedown, element);
+
+                if (options.wait >= 0 && options.wait !== null) {
+                    var mouseup = {
+                        type: 'mouseup',
+                        button: 1
+                    };
+
+                    setTimeout(hideRipple(mouseup, element), options.wait);
+                }
+            }
         }
+    };
 
+    /**
+     * Remove all ripples from an element.
+     */
+    Waves.calm = function(elements) {
+        elements = getWavesElements(elements);
+        var mouseup = {
+            type: 'mouseup',
+            button: 1
+        };
 
-    })
-}
+        for (var i = 0, len = elements.length; i < len; i++) {
+            Effect.hide(mouseup, elements[i]);
+        }
+    };
+
+    /**
+     * Deprecated API fallback
+     */
+    Waves.displayEffect = function(options) {
+        console.error('Waves.displayEffect() has been deprecated and will be removed in future version. Please use Waves.init() to initialize Waves effect');
+        Waves.init(options);
+    };
+
+    return Waves;
+});
