@@ -1,29 +1,30 @@
 {
-  "name": "vue-waves",
-  "homepage": "http://www.eicoding.com",
-  "version": "0.0.5",
-  "description": "it&#x27;s a vuejs version of waves",
-  "author": "teddyzhu",
-  "scripts": {
-
-  },
-  "dependencies": {
-    "vue": "^1.0.21",
-    "css-loader": "^0.23.1",
-    "cssnext-loader": "^1.0.1"
-  },
-  "readme":"README.md",
-  "main": "waves.js",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:Teddy-Zhu/vue-waves.git"
-  },
-  "license": "MIT",
-  "devDependencies": {
-  },
-  "files": [
-    "Readme.md",
-    "waves.js",
-    "waves.css"
-  ]
+    "name": "vue-waves",
+    "homepage": "https://github.com/Teddy-Zhu/vue-waves",
+    "version": "0.1.0",
+    "description": "A Vue.js version of waves",
+    "author": "teddyzhu",
+    "scripts": {
+        "build": "webpack -p"
+    },
+    "dependencies": {},
+    "readme": "README.md",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:Teddy-Zhu/vue-waves.git"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "babel-core": "^6.17.0",
+        "babel-loader": "^6.2.5",
+        "babel-preset-es2015": "^6.16.0",
+        "css-loader": "^0.25.0",
+        "style-loader": "^0.13.1",
+        "vue": "^2.0.3",
+        "webpack": "^1.13.2"
+    },
+    "files": [
+        "dist"
+    ]
 }
