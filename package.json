@@ -1,7 +1,7 @@
 {
     "name": "vue-waves",
     "homepage": "https://github.com/Teddy-Zhu/vue-waves",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A Vue.js version of waves",
     "author": "teddyzhu",
     "scripts": {
@@ -25,6 +25,8 @@
         "webpack": "^1.13.2"
     },
     "files": [
-        "dist"
+        "dist",
+        "waves.css",
+        "waves.js"
     ]
 }
