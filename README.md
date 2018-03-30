@@ -7,14 +7,14 @@ A Vue.js version of waves based on https://github.com/fians/Waves.
 ### SetUp
 
 ```bash
-npm install vue-waves
+npm i -S vue-waves
 ```
 
 then in the js file
 
 ```javascript
-var Vue = require('vue')
-var VueWaves = require('vue-waves');
+import Vue from 'vue';
+import VueWaves from 'vue-waves';
 
 Vue.use(VueWaves);
 ```
@@ -33,6 +33,7 @@ Vue.use(VueWaves, {
 
 ```html
 <button v-waves.button>Vue-Waves</button>
+<i class="fa fa-times" v-waves.circle></i>
 ```
 
 Vue directive:
@@ -49,3 +50,10 @@ Demo:
 
     git clone https://github.com/Teddy-Zhu/vue-waves.git
     open vue-waves/demo/index.html
+
+# Contributes
+
+```
+$ npm i
+$ npm run build
+```
