@@ -5,7 +5,7 @@
     "description": "A Vue.js version of waves",
     "author": "teddyzhu",
     "scripts": {
-        "build": "webpack -p"
+        "build": "./node_modules/webpack/bin/webpack.js -p"
     },
     "dependencies": {},
     "readme": "README.md",
