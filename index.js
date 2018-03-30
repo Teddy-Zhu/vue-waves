@@ -1,7 +1,7 @@
 import './waves.css'
 import Waves from './waves.js'
 
-module.exports = {
+export default {
     install(Vue, options = { name: 'waves' }) {
         Vue.directive(options.name, {
             inserted(el, binding) {
